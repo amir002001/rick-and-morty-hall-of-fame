@@ -1,12 +1,16 @@
+import { QueryClient, QueryClientProvider } from "react-query";
+import "./App.css";
+import Characters from "./components/Characters";
 
-import './App.css';
-import Characters from './components/Characters';
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="App">
-      <Characters></Characters>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
+        <Characters></Characters>
+      </div>
+    </QueryClientProvider>
   );
 }
 
