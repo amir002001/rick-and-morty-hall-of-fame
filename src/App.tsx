@@ -8,7 +8,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App">
-        <Characters></Characters>
+        <div className="container">
+          <h1>Rick and Morty Hall of Fame</h1>
+          <Characters></Characters>
+        </div>
       </div>
     </QueryClientProvider>
   );
