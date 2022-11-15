@@ -1,14 +1,24 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
 import type { CharacterModel } from "./Character";
 import Character from "./Character";
 
 const Characters = () => {
-  const fetchCharacters = async () => {
-    const response = await fetch("https://rickandmortyapi.com/api/character");
-    return response.json();
-  };
+  const [page, setPage] = useState(1);
 
-  const { data, status } = useQuery("characters", fetchCharacters);
+  // const fetchCharacters = ;
+
+  const { data, status, isPreviousData } = useQuery(
+    ["characters", page],
+    async ({ queryKey }) => {
+      const response = await fetch(
+        `https://rickandmortyapi.com/api/character?page=${queryKey[1]}`
+      );
+      return response.json();
+    }, {
+      keepPreviousData: true,
+    }
+  );
 
   if (status === "loading") {
     return <div>Loading ...</div>;
@@ -19,9 +29,17 @@ const Characters = () => {
 
   return (
     <div className="characters">
-      {data.results.map((character: CharacterModel) => (
-        <Character character={character}></Character>
+      {data.results.map((character: CharacterModel, index: number) => (
+        <Character key={index} character={character}></Character>
       ))}
+      <div>
+        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+          Previous
+        </button>
+        <button disabled={!data.info.next || isPreviousData} onClick={() => setPage(page + 1)}>
+          Next
+        </button>
+      </div>
     </div>
   );
 };
